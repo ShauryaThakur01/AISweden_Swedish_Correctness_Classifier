@@ -27,14 +27,3 @@ Each candidate had 124,691,713 parameters and trained on 385 examples. Across th
 
 On the 120 public test examples, the selected model achieved **0.832 Spearman and 0.953 ROC-AUC**. The evaluator recorded **12.3 seconds and 586 samples per minute**, including model loading. The run used Windows and PyTorch 2.6.0 on an AMD CPU (family 25, model 80). The assignment reports 0.528 Spearman, 0.783 ROC-AUC and 714 samples per minute for its starter baseline on this split. KB-BERT scored higher on both quality measures. The baseline used a separately reported laptop CPU, so the timings cannot isolate the effect of model choice.
 
-## Limitations and error analysis
-
-**The selected model gave overly generous scores to poor texts.** On the 47 validation examples labeled poor, its mean prediction was 0.489 against a mean reference score of 0.335. On the 46 good examples, its mean prediction of 0.946 was close to the reference mean of 0.958. A held-out sentence pair shows how a high overall ROC-AUC can coexist with a missed grammatical distinction. In a sentence about a project meeting, changing *vad som återstår* to *vad som återstå* removes the finite verb ending. The reference score fell from 0.95 to 0.35, while the model's prediction moved only from 0.954 to 0.947.
-
-**The generated-data model drew a weaker distinction between good and poor texts.** Its mean predictions were 0.793 for good examples and 0.643 for poor ones. One revealing case was *Hon köpte en ny vinter jacka.* The split compound should be written *vinterjacka*. Against a reference of 0.45, the generated-data model predicted 0.879 and the supplied-data model predicted 0.473. The generator never introduces split compounds. It also uses only three sentence frames and assigns a fixed score to each error count. Since sentence variety, error coverage and scoring rules all changed together, this experiment cannot determine which contributed most to the performance gap.
-
-**Scope of the comparison.** The result supports choosing the supplied examples over this particular generator at a budget of 385 training texts. Both validation and public test texts come from the assignment, and only the selected model was evaluated on the public test. A single grouped split and training seed leave the variability of the validation gap unmeasured. Whether synthetic examples help when added to the supplied data, or whether these scores transfer to naturally occurring learner writing, remains open.
-
-## Reference
-
-Malmsten, M., Börjeson, L., and Haffenden, C. (2020). *Playing with Words at the National Library of Sweden: Making a Swedish BERT*. [Paper](https://arxiv.org/abs/2007.01658)
